@@ -19,3 +19,4 @@ slides/**/out*/
 outputs/
 sesi-2-rnn/data/*.h5
 >>>>>>> 8f1b0ee6982687b90bb5940f8ed4b7addd020c75
+.ipynb_checkpoints/
