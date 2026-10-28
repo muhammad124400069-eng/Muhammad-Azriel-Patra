@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+hasil/ablasi_cepat.csv
+# berkas sementara LaTeX
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
