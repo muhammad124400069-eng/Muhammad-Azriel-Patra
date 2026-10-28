@@ -32,22 +32,11 @@
 
 % Satu blok per anggota (maks. 3). Hapus blok yang tidak dipakai.
 \author{
-\IEEEauthorblockN{Nama Anggota 1}
-\IEEEauthorblockA{NIM 1221400xx\\
+\IEEEauthorblockN{Muhammad Azriel Patra}
+\IEEEauthorblockA{NIM 124400069\\
 Teknik Telekomunikasi, ITERA\\
-email@student.itera.ac.id}
-\and
-\IEEEauthorblockN{Nama Anggota 2}
-\IEEEauthorblockA{NIM 1221400xx\\
-Teknik Telekomunikasi, ITERA\\
-email@student.itera.ac.id}
-\and
-\IEEEauthorblockN{Nama Anggota 3}
-\IEEEauthorblockA{NIM 1221400xx\\
-Teknik Telekomunikasi, ITERA\\
-email@student.itera.ac.id}
+muhammad.124400069@student.itera.ac.id}
 }
-
 \maketitle
 
 \begin{abstract}
@@ -66,7 +55,14 @@ prediksi trafik seluler, RNN, LSTM, GRU, studi ablasi
 \section{Data dan Metode}
 
 \subsection{Dataset}
-\petunjuk{Telecom Italia Big Data Challenge \cite{barlacchi2015milan}, versi per jam dari \cite{zhang2021fedda}: periode, resolusi, fitur. Sebutkan kotak Duomo (5060) dan lokasi kelompok (kode, nama, nomor kotak). Gambar~\ref{fig:peta} boleh dipakai.}
+Data yang dipakai berasal dari \textit{Telecom Italia Big Data Challenge}
+\cite{barlacchi2015milan} dalam versi agregat per jam dari
+\cite{zhang2021fedda}, mencakup trafik seluler kota Milan pada 4 November
+sampai 29 Desember 2013. Setiap kotak grid memiliki tiga deret waktu:
+aktivitas internet (\textit{net}), panggilan (\textit{call}), dan SMS
+(\textit{sms}). Eksperimen utama memakai kotak Duomo (5060), sedangkan uji
+generalisasi memakai lokasi kelompok, yaitu [NAMA LOKASI] (kode 9, kotak
+[NOMOR KOTAK]). Lokasi tugas ditunjukkan pada Gambar~\ref{fig:peta}.
 
 \begin{figure}[t]
   \centering
@@ -111,28 +107,45 @@ prediksi trafik seluler, RNN, LSTM, GRU, studi ablasi
 \petunjuk{Tabel baseline naif dan hasil konfigurasi acuan (Bagian 0).}
 
 \subsection{Ablasi Wajib}
-\petunjuk{Satu subbagian atau paragraf per faktor A1--A5. Gunakan grafik dari folder \texttt{hasil/} (boleh digabung beberapa dalam satu gambar agar hemat tempat) dan tabel seperti Tabel~\ref{tab:contoh}. Setiap gambar dan tabel harus dirujuk dan dibahas di teks.}
-
-\begin{table}[t]
+\begin{table*}[t]
   \centering
-  \caption{Contoh format: pengaruh panjang jendela $W$ terhadap test MAE (rata-rata $\pm$ simpangan baku, 3 seed). Angka di bawah hanya contoh.}
-  \label{tab:contoh}
-  \begin{tabular}{@{}lcccc@{}}
-    \toprule
-    $W$ (jam) & ANN & RNN & LSTM & GRU \\
-    \midrule
-    6   & $000 \pm 00$ & $000 \pm 00$ & $000 \pm 00$ & $000 \pm 00$ \\
-    24  & $000 \pm 00$ & $\mathbf{000 \pm 00}$ & $000 \pm 00$ & $000 \pm 00$ \\
-    168 & $000 \pm 00$ & $000 \pm 00$ & $000 \pm 00$ & $000 \pm 00$ \\
-    \bottomrule
+  \caption{Test MAE pada kotak Duomo untuk ablasi A1--A5 (rata-rata $\pm$ simpangan baku, 3 seed). Nilai acuan: $W=24$, \textit{hidden} ANN 32/RNN 68/LSTM 33/GRU 38, 1 lapisan rekuren (ANN 2), $\mathrm{lr}=10^{-3}$, semua fitur.}
+  \label{tab:ablasi}
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}llcccc@{}}
+    ... (isi tabel dari pesan sebelumnya) ...
   \end{tabular}
-\end{table}
+\end{table*}
+Tabel~\ref{tab:ablasi} merangkum kelima ablasi wajib. Sebagai patokan,
+simpangan baku antar seed berkisar $2$--$25$ untuk sebagian besar sel,
+sehingga selisih di bawah angka itu tidak dapat dianggap perbedaan nyata.
 
-\subsection{Ablasi Pilihan}
-\petunjuk{Dua faktor B pilihan kalian: hipotesis awal, hasil, dan apakah hipotesis terbukti.}
+\textbf{A1 (panjang jendela).} ANN paling sensitif: test MAE turun ke
+$271{,}1 \pm 13{,}9$ pada $W=6$ dan memburuk menjadi $402{,}0 \pm 12{,}5$ pada
+$W=168$, karena masukan yang makin lebar menambah parameter lapisan pertama
+tanpa informasi baru. RNN dan GRU hampir datar terhadap $W$ (RNN $224{,}5$--$233{,}5$;
+GRU $237{,}1$--$249{,}8$) dengan selisih di dalam simpangan baku. LSTM terbaik pada
+$W=24$ dan memburuk pada jendela lain.
 
-\subsection{Konfigurasi Terbaik}
-\petunjuk{Konfigurasi terbaik tiap model (dipilih dengan val MAE), lalu hasilnya pada minggu test dan Natal dibandingkan dengan acuan dan baseline naif.}
+\textbf{A2 (ukuran \textit{hidden}).} Memperbesar \textit{hidden} ke 128
+membantu LSTM ($273{,}6 \rightarrow 245{,}6 \pm 6{,}7$) dan GRU
+($237{,}2 \rightarrow 220{,}3 \pm 10{,}6$). Pada ANN dan RNN pengaruhnya tidak
+konsisten; nilai acuan RNN (68) lebih baik daripada seluruh nilai grid.
+
+\textbf{A3 (jumlah lapisan).} Menambah lapisan tidak membantu. LSTM paling
+terpukul: $273{,}6$ (1 lapisan), $308{,}9$ (2), dan $412{,}6 \pm 54{,}2$ (3).
+GRU dan RNN memburuk pada 3 lapisan, sedangkan ANN tidak berubah berarti.
+
+\textbf{A4 (\textit{learning rate}).} $10^{-4}$ terlalu kecil untuk semua model
+karena \textit{early stopping} berhenti sebelum konvergen (test MAE $287{,}9$--$373{,}5$).
+Pada $10^{-2}$, LSTM ($225{,}8 \pm 4{,}2$) dan GRU ($215{,}7 \pm 10{,}9$)
+membaik jelas, tetapi ANN menjadi tidak stabil ($309{,}4 \pm 53{,}2$) dan RNN memburuk.
+
+\textbf{A5 (fitur).} Pengaruhnya bergantung model. ANN justru terbaik dengan
+fitur \textit{net} saja ($271{,}7 \pm 13{,}9$), sedangkan RNN terbaik dengan
+\textit{net+call+sms} ($227{,}6 \pm 2{,}2$) dan GRU dengan semua fitur.
+Fitur waktu (jam, hari) tidak memberi keuntungan konsisten.
 
 \subsection{Uji Generalisasi}
 \petunjuk{Hasil acuan vs terbaik di lokasi kelompok. Apakah urutan model berubah? Kaitkan dengan pola trafik lokasi tersebut.}
@@ -157,7 +170,7 @@ prediksi trafik seluler, RNN, LSTM, GRU, studi ablasi
 \petunjuk{Tuliskan alat AI yang dipakai (misalnya ChatGPT, Claude, Copilot) dan untuk apa (memperbaiki kode, merapikan bahasa, dll.). Bila tidak memakai, tulis ``Tidak ada.'' Seluruh angka harus berasal dari run kalian sendiri.}
 
 \section*{Kode dan Data}
-Kode, notebook beserta output, dan seluruh hasil run tersedia di \url{https://github.com/username/nama-repo}.
+Kode, notebook beserta output, dan seluruh hasil run tersedia di \url{https://github.com/muhammad124400069-eng/Muhammad-Azriel-Patra}.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
