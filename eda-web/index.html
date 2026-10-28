@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EDA NSL-KDD</title>
+<meta name="description" content="Eksplorasi data (EDA) interaktif dataset deteksi intrusi jaringan NSL-KDD untuk Workshop Deep Learning ITERA.">
+<link rel="icon" href="itera_logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+<script>
+  // Terapkan tema tersimpan sebelum halaman digambar (hindari kedip).
+  try { var t = localStorage.getItem("eda-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</head>
+<body>
+<div class="shell">
+
+  <aside class="rail">
+    <a class="brand" href="#ringkas">
+      <img src="itera_logo.png" alt="">
+      <div><b>EDA NSL-KDD</b><span>Workshop Deep Learning</span></div>
+    </a>
+    <nav id="nav" aria-label="Bagian halaman">
+      <a href="#ringkas">Sekilas</a>
+      <a href="#struktur">Struktur data</a>
+      <a href="#kualitas">Kualitas data</a>
+      <a href="#label">Label &amp; serangan</a>
+      <a href="#kategorikal">Fitur kategorikal</a>
+      <a href="#numerik">Fitur numerik</a>
+      <a href="#korelasi">Korelasi</a>
+      <a href="#uji">Latih vs uji</a>
+      <a href="#keputusan">Ke preprocessing</a>
+    </nav>
+    <div class="rail-foot">
+      <button class="theme-btn" id="theme" type="button">Tema</button>
+      <span class="note">Teknik Telekomunikasi · ITERA</span>
+    </div>
+  </aside>
+
+  <main>
+  <div class="wrap">
+
+    <!-- ===================== SEKILAS ===================== -->
+    <section class="hero" id="ringkas">
+      <p class="eyebrow">Sesi 1 · Deteksi intrusi jaringan</p>
+      <h1>Kenali datanya sebelum melatih modelnya.</h1>
+      <p class="lead">
+        NSL-KDD berisi rekaman koneksi jaringan yang sudah diberi label <em>normal</em> atau serangan.
+        Setiap kotak di bawah mewakili sekitar <span id="cellsize"></span>, diurutkan
+        per kategori. Halaman ini membahas apa saja isinya, apa yang janggal, dan apa akibatnya untuk ANN di
+        <code>train.py</code>.
+      </p>
+      <div class="card" style="margin-top:0">
+        <div class="controls">
+          <div class="seg" id="waffle-ds" role="group" aria-label="Pilih himpunan data"></div>
+          <span class="ctl-label" id="waffle-note"></span>
+        </div>
+        <div class="legend" id="waffle-legend"></div>
+        <div class="viz" id="waffle"></div>
+        <div id="waffle-tv"></div>
+      </div>
+    </section>
+
+    <!-- ===================== STRUKTUR ===================== -->
+    <section class="sec" id="struktur">
+      <header>
+        <p class="tag">Bagian 1</p>
+        <h2>Struktur data</h2>
+        <p class="lead">
+          Satu baris adalah satu koneksi jaringan yang dirangkum menjadi 41 fitur, ditambah dua kolom
+          pelengkap: <code>label</code> (nama serangan atau <code>normal</code>) dan <code>difficulty</code>
+          (metadata dataset, bukan fitur). Data dibaca dengan <code>load_nslkdd()</code> yang sama dengan
+          <code>train.py</code>.
+        </p>
+      </header>
+
+      <div class="tiles" id="tiles-struct"></div>
+
+      <h3>Empat kelompok fitur</h3>
+      <p>Fitur dikelompokkan menurut cara ia diekstrak dari trafik. Klik kelompok untuk menyaring kamus fitur di bawah.</p>
+      <div class="card" id="groups"></div>
+
+      <h3>Kamus fitur</h3>
+      <p>
+        Statistik dihitung dari KDDTrain+. Klik judul kolom untuk mengurutkan. Kolom terakhir adalah korelasi
+        Pearson fitur dengan label serangan (merah: nilai tinggi cenderung serangan, biru: cenderung normal).
+      </p>
+      <div class="card flush">
+        <div class="controls" style="padding:14px 16px 0; margin:0 0 12px">
+          <input type="search" id="dict-q" placeholder="Cari fitur…" aria-label="Cari fitur">
+          <div class="seg" id="dict-type" role="group" aria-label="Filter tipe"></div>
+        </div>
+        <div class="tablewrap scroll-y"><table id="dict"></table></div>
+      </div>
+
+      <h3>Contoh baris</h3>
+      <p>400 koneksi acak dari KDDTrain+ (hanya 12 kolom yang ditampilkan agar muat).</p>
+      <div class="card flush">
+        <div class="controls" style="padding:14px 16px 0; margin:0 0 12px">
+          <input type="search" id="rows-q" placeholder="Cari layanan atau label…" aria-label="Cari baris">
+          <select id="rows-cat" aria-label="Filter kategori"></select>
+        </div>
+        <div class="tablewrap"><table id="rows"></table></div>
+        <div class="pager" id="rows-pager"></div>
+      </div>
+    </section>
+
+    <!-- ===================== KUALITAS ===================== -->
+    <section class="sec" id="kualitas">
+      <header>
+        <p class="tag">Bagian 2</p>
+        <h2>Kualitas data</h2>
+        <p class="lead">
+          Tiga pemeriksaan standar sebelum data dipakai: sel kosong, baris duplikat, dan kolom yang nilainya
+          selalu sama.
+        </p>
+      </header>
+      <div class="tiles" id="tiles-quality"></div>
+
+      <div class="card">
+        <h4>Fitur yang didominasi angka nol</h4>
+        <p class="sub">Persentase baris bernilai 0 di KDDTrain+, hanya fitur dengan lebih dari 50% nol.</p>
+        <div class="viz" id="zeros"></div>
+      </div>
+
+      <div class="finding">
+        <p class="fh">Temuan</p>
+        <ul>
+          <li>Data <strong>bersih</strong>: tidak ada <em>missing value</em> dan tidak ada duplikat, jadi tidak perlu imputasi atau pembersihan baris.</li>
+          <li><code>num_outbound_cmds</code> <strong>selalu 0</strong> sehingga tidak membawa informasi. Setelah <em>standardization</em> nilainya tetap 0, jadi aman dibiarkan, tetapi boleh dibuang.</li>
+          <li><code>difficulty</code> adalah metadata dataset, bukan sifat koneksi, sehingga dibuang sebelum training.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== LABEL ===================== -->
+    <section class="sec" id="label">
+      <header>
+        <p class="tag">Bagian 3</p>
+        <h2>Label &amp; serangan</h2>
+        <p class="lead">
+          Kolom <code>label</code> berisi nama serangan spesifik. Setiap serangan termasuk satu dari empat
+          kategori.
+        </p>
+      </header>
+
+      <div class="card flush">
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Kategori</th><th>Arti</th><th>Contoh</th></tr></thead>
+            <tbody id="cat-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3>Jenis serangan</h3>
+      <div class="card">
+        <div class="controls">
+          <div class="seg" id="lab-ds" role="group" aria-label="Pilih himpunan data"></div>
+          <div class="seg" id="lab-cat" role="group" aria-label="Filter kategori"></div>
+        </div>
+        <p class="sub" id="lab-sub"></p>
+        <div class="viz" id="labels"></div>
+        <div id="labels-tv"></div>
+      </div>
+      <p>
+        Perhatikan <strong>sumbu logaritmik</strong>: <code>neptune</code> punya ~41 ribu <em>record</em>, sedangkan
+        <code>spy</code> hanya 2. Tanpa skala log, batang kecil tidak akan terlihat.
+      </p>
+
+      <h3>Ketidakseimbangan kelas</h3>
+      <div class="card">
+        <h4>Proporsi kategori</h4>
+        <p class="sub">Persentase <em>record</em> per kategori. Batang pekat: data latih. Batang pucat: data uji.</p>
+        <div class="viz" id="catshare"></div>
+        <div id="catshare-tv"></div>
+      </div>
+      <div class="finding">
+        <p class="fh">Temuan</p>
+        <ul id="f-imbalance"></ul>
+      </div>
+
+      <h3>Serangan yang hanya muncul di data uji</h3>
+      <div class="card">
+        <h4 id="newatk-h"></h4>
+        <p class="sub">Jenis serangan di KDDTest+ yang tidak pernah ada di KDDTrain+. Angka: jumlah <em>record</em> di data uji.</p>
+        <div class="chips" id="newatk"></div>
+      </div>
+      <p id="newatk-p"></p>
+
+      <h3>Label biner untuk hands-on</h3>
+      <p>
+        Di <code>train.py</code> masalah disederhanakan: <strong>normal = 0</strong>, <strong>serangan apa pun = 1</strong>.
+      </p>
+      <div class="card">
+        <div class="legend">
+          <span class="lg"><i style="background:var(--c-normal)"></i>Normal (0)</span>
+          <span class="lg"><i style="background:var(--attack)"></i>Serangan, semua kategori (1)</span>
+        </div>
+        <div class="viz" id="binary"></div>
+      </div>
+      <p id="binary-p"></p>
+    </section>
+
+    <!-- ===================== KATEGORIKAL ===================== -->
+    <section class="sec" id="kategorikal">
+      <header>
+        <p class="tag">Bagian 4</p>
+        <h2>Fitur kategorikal</h2>
+        <p class="lead">
+          Tiga fitur berupa teks: <code>protocol_type</code>, <code>service</code>, dan <code>flag</code>.
+          Pertanyaannya: apakah nilai-nilai ini berkaitan dengan jenis serangan?
+        </p>
+      </header>
+
+      <div class="card">
+        <div class="controls">
+          <div class="seg" id="cf-feature" role="group" aria-label="Pilih fitur"></div>
+          <div class="seg" id="cf-ds" role="group" aria-label="Pilih himpunan data"></div>
+          <button class="theme-btn" id="cf-more" type="button" hidden></button>
+        </div>
+        <div class="legend" id="cf-legend"></div>
+        <p class="sub" id="cf-sub"></p>
+        <div class="viz" id="cf"></div>
+        <div id="cf-tv"></div>
+      </div>
+
+      <div class="finding">
+        <p class="fh">Cara membaca</p>
+        <ul>
+          <li><strong>protocol_type:</strong> TCP mendominasi (~82%) dan memuat semua kategori. ICMP didominasi serangan (<code>smurf</code> dan <code>ipsweep</code>). UDP sebagian besar normal, misalnya DNS.</li>
+          <li><strong>service:</strong> <code>http</code>, <code>smtp</code>, dan <code>domain_u</code> hampir seluruhnya normal. <code>private</code> dan <code>ecr_i</code> didominasi serangan (<code>neptune</code> ke <em>port</em> acak, <code>smurf</code> lewat ICMP <em>echo</em>). Layanan jarang seperti <code>Z39_50</code>, <code>uucp</code>, dan <code>courier</code> hampir 100% serangan: koneksi ke sana hanya muncul saat penyerang memindai semua <em>port</em>.</li>
+          <li><strong>flag:</strong> satu fitur sederhana seperti <code>S0</code> saja sudah menandai serangan DoS dengan sangat kuat (lihat tabel di bawah).</li>
+        </ul>
+      </div>
+
+      <h3>Arti <em>flag</em> koneksi TCP</h3>
+      <div class="card flush">
+        <div class="tablewrap">
+          <table class="flagtable" style="font-family:var(--sans)">
+            <thead><tr><th>Flag</th><th class="wrapc">Arti</th><th class="wrapc">Kaitan dengan serangan</th><th class="num">% serangan</th></tr></thead>
+            <tbody id="flag-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3>Dampaknya: <em>one-hot encoding</em> menjadi 122 fitur</h3>
+      <p>
+        Neuron hanya menerima angka, jadi tiap nilai teks dijadikan satu kolom 0/1. Inilah asal angka
+        <strong>122</strong> pada input MLP <code>122-64-32-1</code>.
+      </p>
+      <div class="card"><div class="eq" id="onehot"></div></div>
+      <p id="onehot-p"></p>
+    </section>
+
+    <!-- ===================== NUMERIK ===================== -->
+    <section class="sec" id="numerik">
+      <header>
+        <p class="tag">Bagian 5</p>
+        <h2>Fitur numerik</h2>
+        <p class="lead">Skala antar fitur sangat berbeda, sebaran sangat miring, tetapi beberapa fitur jelas membedakan normal dari serangan.</p>
+      </header>
+
+      <h3>Skala antar fitur</h3>
+      <div class="card">
+        <h4>Nilai maksimum tiap fitur numerik</h4>
+        <p class="sub">Skala logaritmik, KDDTrain+, tanpa fitur konstan.</p>
+        <div class="viz" id="scale"></div>
+      </div>
+      <p id="scale-p"></p>
+
+      <h3>Fitur mana yang membedakan normal dan serangan?</h3>
+      <p>
+        Pilih sebuah fitur. Kurva menunjukkan persentase koneksi <em>tiap kelas</em> yang jatuh di setiap rentang nilai.
+        Semakin sedikit tumpang tindih, semakin berguna fitur itu.
+      </p>
+      <div class="card">
+        <div class="controls">
+          <label class="ctl-label" for="h-feature">Fitur</label>
+          <select id="h-feature"></select>
+          <div class="seg" id="h-scale" role="group" aria-label="Skala nilai"></div>
+        </div>
+        <div class="chips" id="h-quick" style="margin-bottom:14px"></div>
+        <div class="legend">
+          <span class="lg"><i style="background:var(--c-normal)"></i>Normal</span>
+          <span class="lg"><i style="background:var(--attack)"></i>Serangan</span>
+          <span class="lg muted" id="h-stats"></span>
+        </div>
+        <div class="viz" id="hist"></div>
+      </div>
+      <div class="finding">
+        <p class="fh">Contoh yang layak dicoba</p>
+        <ul>
+          <li><code>count</code>: serangan DoS membuka <strong>ratusan koneksi</strong> ke host yang sama dalam 2 detik, sedangkan koneksi normal hanya sedikit.</li>
+          <li><code>serror_rate</code>: proporsi koneksi dengan <em>error</em> SYN. Hampir 0 untuk normal, hampir 1 untuk SYN <em>flood</em>.</li>
+          <li><code>same_srv_rate</code> dan <code>dst_host_same_srv_rate</code>: koneksi normal cenderung ke layanan yang sama, sedangkan pemindaian berpindah-pindah layanan.</li>
+          <li><code>src_bytes</code> (pilih skala log): ada kelompok koneksi 0 <em>byte</em>, banyak di antaranya SYN <em>flood</em> yang tidak pernah mengirim data.</li>
+        </ul>
+        <p style="margin-top:8px">Tidak ada satu fitur yang memisahkan kedua kelas dengan sempurna. ANN bertugas menggabungkan banyak fitur.</p>
+      </div>
+
+      <h3>Profil tiap kategori serangan</h3>
+      <p>Rata-rata beberapa fitur per kategori. Warna dinormalisasi per fitur (baris): terang 0, gelap nilai tertinggi di antara kategori.</p>
+      <div class="card flush">
+        <div class="tablewrap"><table class="heat" id="profile"></table></div>
+      </div>
+      <div class="finding">
+        <p class="fh">Sidik jari tiap kategori</p>
+        <ul>
+          <li><strong>DoS:</strong> <code>count</code> dan <code>serror_rate</code> tinggi, <code>same_srv_rate</code> rendah. Banjir koneksi gagal ke banyak <em>port</em>.</li>
+          <li><strong>Probe:</strong> <code>rerror_rate</code> paling tinggi dan <code>logged_in</code> hampir 0. Hanya "mengetuk pintu", tidak masuk.</li>
+          <li><strong>R2L:</strong> <code>logged_in</code>, <code>num_failed_logins</code>, dan <code>hot</code> paling tinggi. Mencoba masuk lewat <em>login</em> dan mengakses file sistem.</li>
+          <li><strong>U2R:</strong> <code>root_shell</code> dan <code>num_file_creations</code> paling tinggi. Sudah masuk, lalu berusaha menjadi <em>root</em>.</li>
+        </ul>
+        <p style="margin-top:8px">R2L dan U2R terlihat dari <strong>fitur konten</strong>, bukan volume trafik, dan datanya sangat sedikit. Ini sebabnya keduanya paling sulit dideteksi.</p>
+      </div>
+    </section>
+
+    <!-- ===================== KORELASI ===================== -->
+    <section class="sec" id="korelasi">
+      <header>
+        <p class="tag">Bagian 6</p>
+        <h2>Korelasi</h2>
+        <p class="lead">
+          Korelasi Pearson dihitung dari KDDTrain+. Mendekati +1: nilai tinggi cenderung serangan (merah).
+          Mendekati −1: nilai tinggi cenderung normal (biru).
+        </p>
+      </header>
+
+      <div class="card">
+        <h4>15 fitur dengan korelasi terkuat terhadap label serangan</h4>
+        <p class="sub">Korelasi dengan <code>is_attack</code>.</p>
+        <div class="viz" id="corr-label"></div>
+        <div id="corr-label-tv"></div>
+      </div>
+      <div class="finding">
+        <p class="fh">Temuan</p>
+        <ul>
+          <li><strong>Positif:</strong> fitur <code>*serror_rate</code> dan <code>count</code>, ciri serangan DoS.</li>
+          <li><strong>Negatif:</strong> <code>same_srv_rate</code>, <code>dst_host_srv_count</code>, <code>logged_in</code>, ciri koneksi normal yang "rapi".</li>
+          <li>Korelasi hanya menangkap hubungan <strong>linear</strong>. Fitur berkorelasi rendah belum tentu tidak berguna: ANN dengan aktivasi non-linear bisa memanfaatkan hubungan yang lebih rumit.</li>
+        </ul>
+      </div>
+
+      <h3>Korelasi antar fitur</h3>
+      <div class="card">
+        <p class="sub">Arahkan kursor ke sebuah sel untuk melihat pasangan fiturnya. Garis tipis memisahkan empat kelompok fitur.</p>
+        <div class="scrollx viz" id="heatmap"></div>
+      </div>
+      <div class="card flush">
+        <div style="padding:16px 22px 4px"><h4 style="margin:0" id="redund-h"></h4></div>
+        <div class="tablewrap"><table id="redund"></table></div>
+      </div>
+      <p style="margin-top:14px">
+        Ada kelompok fitur yang hampir identik. Fitur redundan tidak merusak ANN, tetapi menambah parameter tanpa
+        menambah informasi. Di tahap lanjut, fitur seperti ini bisa dikurangi (<em>feature selection</em>).
+      </p>
+    </section>
+
+    <!-- ===================== LATIH vs UJI ===================== -->
+    <section class="sec" id="uji">
+      <header>
+        <p class="tag">Bagian 7</p>
+        <h2>Data latih vs data uji</h2>
+        <p class="lead">
+          Kolom <code>difficulty</code> menyatakan berapa dari 21 model <em>machine learning</em> (pada penelitian
+          pembuat dataset) yang menebak <em>record</em> itu dengan benar. Nilai 21 berarti mudah, nilai kecil berarti sulit.
+        </p>
+      </header>
+
+      <div class="card">
+        <h4>Tingkat kesulitan <em>record</em></h4>
+        <p class="sub">Persentase <em>record</em> pada tiap nilai <code>difficulty</code>.</p>
+        <div class="legend">
+          <span class="lg"><i style="background:var(--train)"></i>KDDTrain+</span>
+          <span class="lg"><i style="background:var(--test)"></i>KDDTest+</span>
+        </div>
+        <div class="viz" id="diff"></div>
+      </div>
+
+      <div class="card flush">
+        <div style="padding:16px 22px 4px">
+          <h4 style="margin:0">Proporsi serangan per protokol</h4>
+          <p class="sub" style="margin:2px 0 0">Persentase koneksi berlabel serangan.</p>
+        </div>
+        <div class="tablewrap"><table id="proto"></table></div>
+      </div>
+
+      <div class="finding">
+        <p class="fh">Temuan</p>
+        <ul id="f-shift"></ul>
+      </div>
+    </section>
+
+    <!-- ===================== KEPUTUSAN ===================== -->
+    <section class="sec" id="keputusan">
+      <header>
+        <p class="tag">Bagian 8</p>
+        <h2>Dari temuan ke <em>preprocessing</em></h2>
+        <p class="lead">Setiap langkah di <code>preprocessing.py</code> punya alasan yang bisa ditelusuri ke EDA.</p>
+      </header>
+      <div class="card flush">
+        <div class="tablewrap">
+          <table class="decision" id="decision" style="font-family:var(--sans)"></table>
+        </div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      Sumber data: NSL-KDD (Tavallaee dkk., 2009), perbaikan dari KDD Cup 99, dimuat dari <code>KDDTrain+.txt</code> dan
+      <code>KDDTest+.txt</code>. Semua angka pada halaman ini dihitung oleh <code>eda-web/build_data.py</code> dan
+      disimpan di <code>data.js</code>. Narasi mengikuti notebook <code>sesi-1-ann/eda_nslkdd.ipynb</code>.
+    </footer>
+  </div>
+  </main>
+</div>
+
+<div id="tip" role="tooltip"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,14 +1,28 @@
 [project]
+<<<<<<< HEAD
 name = "tugas-ablasi-rnn"
 version = "0.1.0"
 description = "Tugas Workshop Deep Learning: studi ablasi RNN, LSTM, GRU vs ANN untuk prediksi trafik seluler Milan"
+=======
+name = "dl-workshop"
+version = "0.1.0"
+description = "Workshop Deep Learning Dasar untuk Mahasiswa Teknik Telekomunikasi ITERA"
+>>>>>>> 8f1b0ee6982687b90bb5940f8ed4b7addd020c75
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 dependencies = [
     "torch>=2.2",
     "numpy>=1.26",
     "pandas>=2.1",
+<<<<<<< HEAD
     "matplotlib>=3.8",
     "jupyterlab>=4.1",
     "ipykernel>=6.29",
+=======
+    "scikit-learn>=1.4",
+    "matplotlib>=3.8",
+    "jupyterlab>=4.1",
+    "ipykernel>=6.29",
+    "h5py>=3.10",
+>>>>>>> 8f1b0ee6982687b90bb5940f8ed4b7addd020c75
 ]

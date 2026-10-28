@@ -2,6 +2,7 @@
 __pycache__/
 .ipynb_checkpoints/
 .DS_Store
+<<<<<<< HEAD
 hasil/ablasi_cepat.csv
 # berkas sementara LaTeX
 *.aux
@@ -12,3 +13,9 @@ hasil/ablasi_cepat.csv
 *.log
 *.out
 *.synctex.gz
+=======
+slides/**/out*/
+**/data/*.txt
+outputs/
+sesi-2-rnn/data/*.h5
+>>>>>>> 8f1b0ee6982687b90bb5940f8ed4b7addd020c75

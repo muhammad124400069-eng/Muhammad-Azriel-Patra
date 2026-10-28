@@ -1,0 +1,306 @@
+{
+  "device": "NVIDIA GeForce RTX 5070",
+  "torch": "2.14.0+cu130",
+  "seeds": [
+    0,
+    1
+  ],
+  "langkah": 4000,
+  "hidden": {
+    "RNN": 128,
+    "LSTM": 64,
+    "GRU": 74
+  },
+  "ringkas": [
+    {
+      "T": 10,
+      "model": "GRU",
+      "MSE": 0.0,
+      "MSE_min": 0.0,
+      "MSE_max": 0.0,
+      "tepat": 100.0
+    },
+    {
+      "T": 10,
+      "model": "LSTM",
+      "MSE": 0.0001,
+      "MSE_min": 0.0001,
+      "MSE_max": 0.0002,
+      "tepat": 100.0
+    },
+    {
+      "T": 10,
+      "model": "RNN",
+      "MSE": 0.0011,
+      "MSE_min": 0.001,
+      "MSE_max": 0.0011,
+      "tepat": 99.725
+    },
+    {
+      "T": 50,
+      "model": "GRU",
+      "MSE": 0.0001,
+      "MSE_min": 0.0001,
+      "MSE_max": 0.0002,
+      "tepat": 100.0
+    },
+    {
+      "T": 50,
+      "model": "LSTM",
+      "MSE": 0.0066,
+      "MSE_min": 0.002,
+      "MSE_max": 0.0113,
+      "tepat": 75.525
+    },
+    {
+      "T": 50,
+      "model": "RNN",
+      "MSE": 0.0612,
+      "MSE_min": 0.0154,
+      "MSE_max": 0.1071,
+      "tepat": 43.8
+    },
+    {
+      "T": 100,
+      "model": "GRU",
+      "MSE": 0.0003,
+      "MSE_min": 0.0002,
+      "MSE_max": 0.0004,
+      "tepat": 99.475
+    },
+    {
+      "T": 100,
+      "model": "LSTM",
+      "MSE": 0.0053,
+      "MSE_min": 0.0032,
+      "MSE_max": 0.0074,
+      "tepat": 86.45
+    },
+    {
+      "T": 100,
+      "model": "RNN",
+      "MSE": 0.1689,
+      "MSE_min": 0.1689,
+      "MSE_max": 0.1689,
+      "tepat": 18.275
+    },
+    {
+      "T": 200,
+      "model": "GRU",
+      "MSE": 0.0003,
+      "MSE_min": 0.0002,
+      "MSE_max": 0.0003,
+      "tepat": 99.725
+    },
+    {
+      "T": 200,
+      "model": "LSTM",
+      "MSE": 0.1219,
+      "MSE_min": 0.0806,
+      "MSE_max": 0.1631,
+      "tepat": 22.15
+    },
+    {
+      "T": 200,
+      "model": "RNN",
+      "MSE": 0.1652,
+      "MSE_min": 0.1639,
+      "MSE_max": 0.1665,
+      "tepat": 19.325
+    }
+  ],
+  "per_seed": [
+    {
+      "T": 10,
+      "model": "RNN",
+      "seed": 0,
+      "MSE": 0.001,
+      "tepat_%": 99.9,
+      "detik": 5.7785
+    },
+    {
+      "T": 10,
+      "model": "RNN",
+      "seed": 1,
+      "MSE": 0.0011,
+      "tepat_%": 99.55,
+      "detik": 4.6948
+    },
+    {
+      "T": 10,
+      "model": "LSTM",
+      "seed": 0,
+      "MSE": 0.0002,
+      "tepat_%": 100.0,
+      "detik": 5.1379
+    },
+    {
+      "T": 10,
+      "model": "LSTM",
+      "seed": 1,
+      "MSE": 0.0001,
+      "tepat_%": 100.0,
+      "detik": 5.2007
+    },
+    {
+      "T": 10,
+      "model": "GRU",
+      "seed": 0,
+      "MSE": 0.0,
+      "tepat_%": 100.0,
+      "detik": 5.0342
+    },
+    {
+      "T": 10,
+      "model": "GRU",
+      "seed": 1,
+      "MSE": 0.0,
+      "tepat_%": 100.0,
+      "detik": 5.0205
+    },
+    {
+      "T": 50,
+      "model": "RNN",
+      "seed": 0,
+      "MSE": 0.1071,
+      "tepat_%": 21.3,
+      "detik": 4.8672
+    },
+    {
+      "T": 50,
+      "model": "RNN",
+      "seed": 1,
+      "MSE": 0.0154,
+      "tepat_%": 66.3,
+      "detik": 4.8463
+    },
+    {
+      "T": 50,
+      "model": "LSTM",
+      "seed": 0,
+      "MSE": 0.0113,
+      "tepat_%": 52.85,
+      "detik": 5.3357
+    },
+    {
+      "T": 50,
+      "model": "LSTM",
+      "seed": 1,
+      "MSE": 0.002,
+      "tepat_%": 98.2,
+      "detik": 5.3797
+    },
+    {
+      "T": 50,
+      "model": "GRU",
+      "seed": 0,
+      "MSE": 0.0001,
+      "tepat_%": 100.0,
+      "detik": 5.2113
+    },
+    {
+      "T": 50,
+      "model": "GRU",
+      "seed": 1,
+      "MSE": 0.0002,
+      "tepat_%": 100.0,
+      "detik": 5.2512
+    },
+    {
+      "T": 100,
+      "model": "RNN",
+      "seed": 0,
+      "MSE": 0.1689,
+      "tepat_%": 18.4,
+      "detik": 5.0279
+    },
+    {
+      "T": 100,
+      "model": "RNN",
+      "seed": 1,
+      "MSE": 0.1689,
+      "tepat_%": 18.15,
+      "detik": 5.1583
+    },
+    {
+      "T": 100,
+      "model": "LSTM",
+      "seed": 0,
+      "MSE": 0.0032,
+      "tepat_%": 93.95,
+      "detik": 5.7771
+    },
+    {
+      "T": 100,
+      "model": "LSTM",
+      "seed": 1,
+      "MSE": 0.0074,
+      "tepat_%": 78.95,
+      "detik": 5.8942
+    },
+    {
+      "T": 100,
+      "model": "GRU",
+      "seed": 0,
+      "MSE": 0.0004,
+      "tepat_%": 99.25,
+      "detik": 5.8047
+    },
+    {
+      "T": 100,
+      "model": "GRU",
+      "seed": 1,
+      "MSE": 0.0002,
+      "tepat_%": 99.7,
+      "detik": 5.794
+    },
+    {
+      "T": 200,
+      "model": "RNN",
+      "seed": 0,
+      "MSE": 0.1665,
+      "tepat_%": 19.3,
+      "detik": 5.4949
+    },
+    {
+      "T": 200,
+      "model": "RNN",
+      "seed": 1,
+      "MSE": 0.1639,
+      "tepat_%": 19.35,
+      "detik": 5.4861
+    },
+    {
+      "T": 200,
+      "model": "LSTM",
+      "seed": 0,
+      "MSE": 0.0806,
+      "tepat_%": 25.55,
+      "detik": 6.4882
+    },
+    {
+      "T": 200,
+      "model": "LSTM",
+      "seed": 1,
+      "MSE": 0.1631,
+      "tepat_%": 18.75,
+      "detik": 6.4998
+    },
+    {
+      "T": 200,
+      "model": "GRU",
+      "seed": 0,
+      "MSE": 0.0003,
+      "tepat_%": 99.8,
+      "detik": 6.8543
+    },
+    {
+      "T": 200,
+      "model": "GRU",
+      "seed": 1,
+      "MSE": 0.0002,
+      "tepat_%": 99.65,
+      "detik": 6.8255
+    }
+  ]
+}

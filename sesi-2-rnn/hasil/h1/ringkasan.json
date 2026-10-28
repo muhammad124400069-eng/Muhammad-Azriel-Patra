@@ -1,0 +1,374 @@
+{
+  "horizon": 1,
+  "device": "cpu",
+  "torch": "2.14.0",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "max_epochs": 300,
+  "patience": 30,
+  "baseline": [
+    {
+      "model": "Naif: nilai terakhir",
+      "split": "test",
+      "MAE": 600.86,
+      "RMSE": 770.75,
+      "MAPE": 18.45
+    },
+    {
+      "model": "Naif: kemarin",
+      "split": "test",
+      "MAE": 552.17,
+      "RMSE": 871.48,
+      "MAPE": 23.82
+    },
+    {
+      "model": "Naif: minggu lalu",
+      "split": "test",
+      "MAE": 467.6,
+      "RMSE": 756.53,
+      "MAPE": 19.95
+    },
+    {
+      "model": "Naif: nilai terakhir",
+      "split": "natal",
+      "MAE": 431.23,
+      "RMSE": 648.76,
+      "MAPE": 18.19
+    },
+    {
+      "model": "Naif: kemarin",
+      "split": "natal",
+      "MAE": 921.47,
+      "RMSE": 1454.34,
+      "MAPE": 42.23
+    },
+    {
+      "model": "Naif: minggu lalu",
+      "split": "natal",
+      "MAE": 1426.23,
+      "RMSE": 2183.94,
+      "MAPE": 96.85
+    }
+  ],
+  "test": [
+    {
+      "W": 24,
+      "model": "ANN",
+      "param": 6497,
+      "epoch": 106.33,
+      "detik": 0.69,
+      "MAE": 309.83,
+      "MAE_sd": 6.02,
+      "RMSE": 445.38,
+      "MAPE": 11.25,
+      "MAPE_sd": 0.83
+    },
+    {
+      "W": 24,
+      "model": "GRU",
+      "param": 5397,
+      "epoch": 193.67,
+      "detik": 11.6,
+      "MAE": 237.16,
+      "MAE_sd": 9.32,
+      "RMSE": 360.24,
+      "MAPE": 8.02,
+      "MAPE_sd": 0.66
+    },
+    {
+      "W": 24,
+      "model": "LSTM",
+      "param": 5578,
+      "epoch": 168.67,
+      "detik": 11.76,
+      "MAE": 273.56,
+      "MAE_sd": 25.36,
+      "RMSE": 416.97,
+      "MAPE": 9.06,
+      "MAPE_sd": 1.0
+    },
+    {
+      "W": 24,
+      "model": "RNN",
+      "param": 5305,
+      "epoch": 163.67,
+      "detik": 6.09,
+      "MAE": 229.6,
+      "MAE_sd": 5.05,
+      "RMSE": 338.36,
+      "MAPE": 8.47,
+      "MAPE_sd": 0.28
+    },
+    {
+      "W": 168,
+      "model": "ANN",
+      "param": 38753,
+      "epoch": 76.33,
+      "detik": 0.61,
+      "MAE": 402.04,
+      "MAE_sd": 12.51,
+      "RMSE": 549.74,
+      "MAPE": 14.84,
+      "MAPE_sd": 0.6
+    },
+    {
+      "W": 168,
+      "model": "GRU",
+      "param": 5397,
+      "epoch": 193.67,
+      "detik": 73.42,
+      "MAE": 237.16,
+      "MAE_sd": 10.57,
+      "RMSE": 359.47,
+      "MAPE": 8.05,
+      "MAPE_sd": 0.68
+    },
+    {
+      "W": 168,
+      "model": "LSTM",
+      "param": 5578,
+      "epoch": 179.33,
+      "detik": 79.23,
+      "MAE": 292.82,
+      "MAE_sd": 19.95,
+      "RMSE": 441.05,
+      "MAPE": 9.85,
+      "MAPE_sd": 1.16
+    },
+    {
+      "W": 168,
+      "model": "RNN",
+      "param": 5305,
+      "epoch": 169.33,
+      "detik": 36.89,
+      "MAE": 233.51,
+      "MAE_sd": 4.83,
+      "RMSE": 340.7,
+      "MAPE": 8.86,
+      "MAPE_sd": 0.5
+    }
+  ],
+  "test_per_seed": [
+    {
+      "W": 24,
+      "model": "ANN",
+      "seed": 0,
+      "MAE": 311.3,
+      "MAPE": 11.0
+    },
+    {
+      "W": 24,
+      "model": "ANN",
+      "seed": 1,
+      "MAE": 314.98,
+      "MAPE": 12.17
+    },
+    {
+      "W": 24,
+      "model": "ANN",
+      "seed": 2,
+      "MAE": 303.21,
+      "MAPE": 10.58
+    },
+    {
+      "W": 24,
+      "model": "RNN",
+      "seed": 0,
+      "MAE": 225.02,
+      "MAPE": 8.34
+    },
+    {
+      "W": 24,
+      "model": "RNN",
+      "seed": 1,
+      "MAE": 235.02,
+      "MAPE": 8.79
+    },
+    {
+      "W": 24,
+      "model": "RNN",
+      "seed": 2,
+      "MAE": 228.75,
+      "MAPE": 8.27
+    },
+    {
+      "W": 24,
+      "model": "LSTM",
+      "seed": 0,
+      "MAE": 249.72,
+      "MAPE": 8.07
+    },
+    {
+      "W": 24,
+      "model": "LSTM",
+      "seed": 1,
+      "MAE": 300.2,
+      "MAPE": 10.06
+    },
+    {
+      "W": 24,
+      "model": "LSTM",
+      "seed": 2,
+      "MAE": 270.75,
+      "MAPE": 9.04
+    },
+    {
+      "W": 24,
+      "model": "GRU",
+      "seed": 0,
+      "MAE": 242.87,
+      "MAPE": 8.08
+    },
+    {
+      "W": 24,
+      "model": "GRU",
+      "seed": 1,
+      "MAE": 226.4,
+      "MAPE": 7.33
+    },
+    {
+      "W": 24,
+      "model": "GRU",
+      "seed": 2,
+      "MAE": 242.19,
+      "MAPE": 8.65
+    },
+    {
+      "W": 168,
+      "model": "ANN",
+      "seed": 0,
+      "MAE": 403.1,
+      "MAPE": 15.5
+    },
+    {
+      "W": 168,
+      "model": "ANN",
+      "seed": 1,
+      "MAE": 413.99,
+      "MAPE": 14.66
+    },
+    {
+      "W": 168,
+      "model": "ANN",
+      "seed": 2,
+      "MAE": 389.03,
+      "MAPE": 14.35
+    },
+    {
+      "W": 168,
+      "model": "RNN",
+      "seed": 0,
+      "MAE": 232.97,
+      "MAPE": 8.66
+    },
+    {
+      "W": 168,
+      "model": "RNN",
+      "seed": 1,
+      "MAE": 228.97,
+      "MAPE": 8.48
+    },
+    {
+      "W": 168,
+      "model": "RNN",
+      "seed": 2,
+      "MAE": 238.58,
+      "MAPE": 9.43
+    },
+    {
+      "W": 168,
+      "model": "LSTM",
+      "seed": 0,
+      "MAE": 273.08,
+      "MAPE": 9.63
+    },
+    {
+      "W": 168,
+      "model": "LSTM",
+      "seed": 1,
+      "MAE": 292.39,
+      "MAPE": 8.83
+    },
+    {
+      "W": 168,
+      "model": "LSTM",
+      "seed": 2,
+      "MAE": 312.98,
+      "MAPE": 11.11
+    },
+    {
+      "W": 168,
+      "model": "GRU",
+      "seed": 0,
+      "MAE": 244.68,
+      "MAPE": 8.16
+    },
+    {
+      "W": 168,
+      "model": "GRU",
+      "seed": 1,
+      "MAE": 225.07,
+      "MAPE": 7.32
+    },
+    {
+      "W": 168,
+      "model": "GRU",
+      "seed": 2,
+      "MAE": 241.71,
+      "MAPE": 8.68
+    }
+  ],
+  "natal": [
+    {
+      "W": 24,
+      "model": "ANN",
+      "mean": 679.99,
+      "std": 52.06
+    },
+    {
+      "W": 24,
+      "model": "GRU",
+      "mean": 468.18,
+      "std": 21.85
+    },
+    {
+      "W": 24,
+      "model": "LSTM",
+      "mean": 585.98,
+      "std": 56.79
+    },
+    {
+      "W": 24,
+      "model": "RNN",
+      "mean": 421.19,
+      "std": 2.4
+    },
+    {
+      "W": 168,
+      "model": "ANN",
+      "mean": 999.33,
+      "std": 18.03
+    },
+    {
+      "W": 168,
+      "model": "GRU",
+      "mean": 471.14,
+      "std": 18.58
+    },
+    {
+      "W": 168,
+      "model": "LSTM",
+      "mean": 597.49,
+      "std": 99.45
+    },
+    {
+      "W": 168,
+      "model": "RNN",
+      "mean": 432.92,
+      "std": 42.16
+    }
+  ]
+}
